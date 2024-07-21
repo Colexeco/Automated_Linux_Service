@@ -1,0 +1,33 @@
+name: Counter Build Deploy
+run-name: deploy counter
+on:
+  push:
+    tags: 
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+jobs:
+  build-and-copy:
+    runs-on: ['self-hosted', 'Linux', 'X64', 'cpsc334']
+    container: ubuntu:latest
+    timeout-minutes: 5
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@main
+      - run: apt-get update
+      - run: apt-get install --no-install-recommends -y default-jre default-jdk junit lintian make
+      - run: make build-deb-in-container
+      - name: copy to VM using scp
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          source: "counter-v2.0.0.deb"
+          target: ~/
+      - name: install counter package on VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
+          script: sudo /usr/bin/dpkg -i counter-v2.0.0.deb

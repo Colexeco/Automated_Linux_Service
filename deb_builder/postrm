@@ -1,0 +1,10 @@
+#!/bin/sh
+
+sudo rm -rf temp
+sudo rm -f counter-v2.0.0.deb
+sudo rm -f ./bin/counter.class ./bin/CounterTest.class
+sudo rm -f /lib/systemd/system/counter.class /lib/systemd/system/counter.service
+sudo rm -f /tmp/currentCount.out
+sudo rm -f /usr/local/bin/counter.class
+systemctl daemon-reload
+sudo userdel counter

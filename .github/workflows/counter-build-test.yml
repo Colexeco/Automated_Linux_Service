@@ -1,0 +1,43 @@
+name: Counter Build
+run-name: build counter
+on: [push,pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@main
+      - run: sudo apt install junit
+      - run: make build
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 0.5
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@main
+      - run: sudo apt install junit 
+      - run: make build
+      - run: timeout 20s make run || echo "Ran counter service for 20 seconds, moving on to next command now"
+      - run: make test
+  build-deb:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@main
+      - run: sudo apt install junit 
+      - run: make build-deb
+      - name: upload debian package as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: counter_debian_package
+          path: ./counter-v2.0.0.deb
+  lint-deb:
+    runs-on: ubuntu-latest
+    timeout-minutes: 0.15
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@main
+      - run: sudo apt install junit lintian
+      - run : make lint-deb

@@ -1,0 +1,17 @@
+#!bin/sh
+
+INSTALL_DIR=/lib/systemd/system/
+SERVICE_WORKING_DIR=/usr/local/bin
+MAIN_PROGRAM_FILE=counter.class
+MAIN_SERVICE_FILE=counter.service
+CONFIGURATION_INSTALL_DIR=/etc/
+MAIN_CONFIG_FILE=counter.conf
+
+echo "Installing counter"
+
+sudo cp bin/$MAIN_PROGRAM_FILE $INSTALL_DIR/
+sudo cp bin/$MAIN_CONFIG_FILE $CONFIGURATION_INSTALL_DIR/
+sudo cp $MAIN_SERVICE_FILE $INSTALL_DIR/
+sudo cp bin/$MAIN_PROGRAM_FILE $SERVICE_WORKING_DIR/
+
+echo "Counter installed"

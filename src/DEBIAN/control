@@ -1,0 +1,8 @@
+Package: counter
+Version: 2.0.0
+Depends: default-jre, lintian, junit
+Section: utils
+Priority: optional
+Architecture: all
+Maintainer: Evan Shoemaker (evan.shoemaker0@gmail.com)
+Description: Simple counter system service that prints username of user who runs it and date/time

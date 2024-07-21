@@ -1,0 +1,35 @@
+name: Self Hosted Counter Container Build Test Lint
+run-name: build counter self hosted
+on: [push, pull_request]
+jobs:
+  build-deb-in-container:
+    runs-on: ['self-hosted', 'Linux', 'X64', 'cpsc334']
+    container: ubuntu:latest
+    timeout-minutes: 5
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@main
+      - run: apt-get update
+      - run: apt-get install --no-install-recommends -y default-jre default-jdk junit lintian make
+      - run: make build-deb-in-container
+  test-in-container:
+    runs-on: ['self-hosted', 'Linux', 'X64', 'cpsc334']
+    container: ubuntu:latest
+    timeout-minutes: 5
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@main
+      - run: apt-get update
+      - run: apt-get install --no-install-recommends -y default-jre default-jdk junit lintian make
+      - run: timeout 20s make run || echo "Ran counter service for 20 seconds, moving on to next command now"
+      - run: make test-in-container
+  lint-deb-in-container:
+    runs-on: ['self-hosted', 'Linux', 'X64', 'cpsc334']
+    container: ubuntu:latest
+    timeout-minutes: 5
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@main
+      - run: apt-get update
+      - run: apt-get install --no-install-recommends -y default-jre default-jdk junit lintian make
+      - run : make lint-deb-in-container

@@ -1,0 +1,8 @@
+#!/bin/bash
+#!/bin/sh
+
+sudo useradd counter -M
+sudo chmod +x /lib/systemd/system/counter.class /lib/systemd/system/counter.service
+systemctl enable counter.service
+systemctl daemon-reload
+sudo service counter start
